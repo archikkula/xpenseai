@@ -6,54 +6,84 @@ function ExpenseForm(props) {
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+  
+const [error, setError] = useState('');
+const [manualCategory, setManualCategory] = useState('');
+const [useManualCategory, setUseManualCategory] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        if(!description || !amount || !date) {
-            alert('Please fill in all fields');
-            return;
-        }
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(''); // Clear previous errors
+    
+    if(!description || !amount || !date) {
+        setError('Please fill in all fields');
+        return;
+    }
 
-        setIsLoading(true);
+    if (parseFloat(amount) <= 0) {
+        setError('Amount must be greater than 0');
+        return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+        let category;
         
-        try {
+        if (useManualCategory && manualCategory) {
+            category = manualCategory;
+        } else {
             // Get AI category
-            const category = await categorizeExpense(description, amount);
-            
-            const newExpense = {
-                id: Date.now(),
-                description: description,
-                amount: parseFloat(amount),
-                date: new Date(date).toLocaleDateString(),
-                category: category,
-                createdAt: new Date().toISOString()
-            };
-
-            const existingExpenses = JSON.parse(localStorage.getItem('expenses') || '[]');
-            const updatedExpenses = [...existingExpenses, newExpense];
-            localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
-            
-            console.log('New Expense Added:', newExpense);
-            
-            if (props.onExpenseAdded) {
-                props.onExpenseAdded();
-            }
-
-            setDescription('');
-            setAmount('');
-            setDate('');
-        } catch (error) {
-            console.error('Error adding expense:', error);
-            alert('Error adding expense. Please try again.');
-        } finally {
-            setIsLoading(false);
+            category = await categorizeExpense(description, amount);
         }
-    };
+        
+        const newExpense = {
+            id: Date.now(),
+            description: description,
+            amount: parseFloat(amount),
+            date: new Date(date).toLocaleDateString(),
+            category: category,
+            createdAt: new Date().toISOString()
+        };
+
+        const existingExpenses = JSON.parse(localStorage.getItem('expenses') || '[]');
+        const updatedExpenses = [...existingExpenses, newExpense];
+        localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
+        
+        console.log('New Expense Added:', newExpense);
+        
+        if (props.onExpenseAdded) {
+            props.onExpenseAdded();
+        }
+
+        setDescription('');
+        setAmount('');
+        setDate('');
+        setManualCategory('');
+        setUseManualCategory(false);
+    } catch (error) {
+        console.error('Error adding expense:', error);
+        setError(error.message || 'Error adding expense. Please try again.');
+    } finally {
+        setIsLoading(false);
+    }
+};
 
     return (
         <div className="form-section">
             <h2 className="form-title">Add New Expense</h2>
+            {error && (
+    <div style={{
+        background: '#fee2e2',
+        border: '1px solid #fecaca',
+        color: '#dc2626',
+        padding: '12px',
+        borderRadius: '8px',
+        marginBottom: '16px'
+    }}>
+        {error}
+    </div>
+)}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <input
@@ -86,12 +116,17 @@ function ExpenseForm(props) {
                     />
                 </div>
                 <button 
-                    type="submit" 
-                    className="add-expense-btn"
-                    disabled={isLoading}
-                >
-                    {isLoading ? 'Adding...' : 'Add Expense'}
-                </button>
+    type="submit" 
+    className="add-expense-btn"
+    disabled={isLoading}
+>
+    {isLoading ? (
+        <>
+            <span className="loading-spinner"></span>
+            Categorizing...
+        </>
+    ) : 'Add Expense'}
+</button>
             </form>  
         </div>
     );
