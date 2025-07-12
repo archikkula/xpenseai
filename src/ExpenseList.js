@@ -4,7 +4,10 @@ function ExpenseList({refreshTrigger}) {
     const [expenses, setExpenses] = useState([]);
 
     useEffect(() => {
-        const storedExpenses = JSON.parse(localStorage.getItem('expenses') || '[]');
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+const key = `expenses_${currentUser?.id}`;
+const storedExpenses = JSON.parse(localStorage.getItem(key) || '[]');
+
         setExpenses(storedExpenses);
         console.log('Loaded Expenses:', storedExpenses);
     }, [refreshTrigger]);
@@ -12,9 +15,11 @@ function ExpenseList({refreshTrigger}) {
     const totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0);
 
     function deleteExpense(expenseId) {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        const key = `expenses_${currentUser?.id}`;
         const updatedExpenses = expenses.filter(expense => expense.id !== expenseId);
         setExpenses(updatedExpenses);
-        localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
+        localStorage.setItem(key, JSON.stringify(updatedExpenses));
         console.log('Deleted Expense:', expenseId);
     }
 
@@ -46,6 +51,8 @@ function ExpenseList({refreshTrigger}) {
         </button>
     </div>
 ))}
+
+                        
                 </>
             )}
         </div>

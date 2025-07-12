@@ -28,6 +28,7 @@ function ExpenseForm(props) {
     setIsLoading(true);
 
     try {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       let category;
 
       if (useManualCategory && manualCategory) {
@@ -45,12 +46,12 @@ function ExpenseForm(props) {
         category: category,
         createdAt: new Date().toISOString(),
       };
-
+      const key = `expenses_${currentUser.id}`;
       const existingExpenses = JSON.parse(
-        localStorage.getItem("expenses") || "[]"
+        localStorage.getItem(key) || "[]"
       );
       const updatedExpenses = [...existingExpenses, newExpense];
-      localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+      localStorage.setItem(key, JSON.stringify(updatedExpenses));
 
       console.log("New Expense Added:", newExpense);
 
