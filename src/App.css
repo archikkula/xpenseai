@@ -164,10 +164,13 @@ body {
 
 /* Expense Cards */
 .expense-card {
+    position: relative;
     background: var(--background);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 16px;
+    padding-bottom: 30px;
+    /* <-- extra space for delete button */
     margin-bottom: 12px;
     transition: all 0.2s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -229,18 +232,18 @@ body {
 /* Delete Button */
 .delete-btn {
     position: absolute;
-    bottom: 12px;
+        bottom: 12px;
         right: 16px;
-        padding: 8px 14px;
+        padding: 6px 12px;
         background: var(--danger-color);
         color: white;
         border: none;
         border-radius: 6px;
-        font-size: 0.95rem;
-        font-weight: 500;
+        font-size: 0.9rem;
         cursor: pointer;
         transition: all 0.2s ease;
-        opacity: 0;
+        opacity:0;
+        
 }
 
 .delete-btn:hover {

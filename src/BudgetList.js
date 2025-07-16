@@ -25,18 +25,19 @@ function BudgetList({ refreshTrigger }) {
     <div className="expense-list-section">
       <h2 className="expense-list-title">Your Budgets</h2>
       {budgets.length === 0 ? (
-        <p className="no-expenses">No budgets set yet.</p>
+        <div className="no-expenses">No budgets set yet.</div>
       ) : (
         budgets.map((budget) => (
-          <div className="expense-card" key={budget.id}>
+          <div className="expense-card" key={budget.id} style={{ position: "relative" }}>
             <div className="expense-item">
               <span className="expense-description">{budget.category}</span>
               <span className="expense-amount">${budget.amount}</span>
             </div>
-            <button
-              onClick={() => deleteBudget(budget.id)}
-              className="delete-btn"
-            >
+            {/* Add space below metadata to avoid crowding */}
+            <div style={{ marginTop: "10px" }}>
+              <span className="expense-date">Monthly Budget</span>
+            </div>
+            <button className="delete-btn" onClick={() => deleteBudget(budget.id)}>
               Delete
             </button>
           </div>

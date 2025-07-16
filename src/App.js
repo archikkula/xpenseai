@@ -6,6 +6,7 @@ import SignupForm from "./SignupForm";
 import LoginForm from "./LoginForm";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
+import Dashboard from "./Dashboard";
 
 function App() {
   const [refreshList, setRefreshList] = React.useState(0);
@@ -114,11 +115,8 @@ function App() {
                 <BudgetList refreshTrigger={refreshList} />
               </>
             )}
-            {activeTab === "dashboard" && (
-              <div style={{ textAlign: "center" }}>
-                📊 Dashboard coming soon!
-              </div>
-            )}
+            {activeTab === "dashboard" && <Dashboard />}
+
             {activeTab === "scan" && (
               <div style={{ textAlign: "center" }}>
                 📷 Receipt scanning coming soon!
