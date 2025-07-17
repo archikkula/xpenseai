@@ -7,6 +7,7 @@ import LoginForm from "./LoginForm";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
 import Dashboard from "./Dashboard";
+import ScanReceipt from "./ScanReceipt";
 
 function App() {
   const [refreshList, setRefreshList] = React.useState(0);
@@ -118,9 +119,7 @@ function App() {
             {activeTab === "dashboard" && <Dashboard />}
 
             {activeTab === "scan" && (
-              <div style={{ textAlign: "center" }}>
-                📷 Receipt scanning coming soon!
-              </div>
+              <ScanReceipt />
             )}
             {activeTab === "settings" && (
               <div style={{ textAlign: "center" }}>

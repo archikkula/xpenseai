@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { categorizeExpense } from "./aiService";
 
-function ExpenseForm(props) {
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
+function ExpenseForm({ onExpenseAdded, prefillData = {} }) {
+  const [description, setDescription] = useState(prefillData.description || "");
+const [amount, setAmount] = useState(prefillData.amount || "");
+const [date, setDate] = useState(prefillData.date || "");
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [error, setError] = useState("");
@@ -55,8 +56,8 @@ function ExpenseForm(props) {
 
       console.log("New Expense Added:", newExpense);
 
-      if (props.onExpenseAdded) {
-        props.onExpenseAdded();
+      if (onExpenseAdded) {
+        onExpenseAdded();
       }
 
       setDescription("");
