@@ -24,18 +24,31 @@ function BudgetForm({ onBudgetAdded }) {
     }
   };
 
+  const categories = [
+    'Food',
+    'Transport',
+    'Utilities',
+    'Entertainment',
+    'Health',
+    'Shopping',
+    'Other'
+  ];
+
   return (
     <div className="form-section">
       <h2 className="form-title">Set Monthly Budgets</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <input
+          <select
             className="form-input"
-            type="text"
-            placeholder="Category (e.g. Food)"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-          />
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
         </div>
         <div className="form-group">
           <input
