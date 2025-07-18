@@ -87,33 +87,33 @@ export async function parseReceiptTextWithAI(rawText) {
       body: JSON.stringify({
         model: "gpt-4",
         messages: [
-            {
-              role: "system",
-              content: `You are a JSON receipt parser. Your only job is to extract a list of purchased products from raw receipt text. You should analyze the text and try to understand the items purchased and output ur understanding, their prices, and the store name if available. Your output should be a JSON array of objects with the following structure:
-          
-          Return only a JSON array like this:
-          [
-            {
-              "description": "clear product name with where it was bought",
-              "amount": "0.00",
-              "source": "Store name if available"
-            }
-          ]
-          
-          ### RULES:
-          - Do NOT include totals, taxes, discounts, payment info, timestamps, or loyalty messages.
-          - Only include items with individual prices (usually near start or middle of receipt).
-          - Ensure descriptions are readable and clear (no codes, abbreviations, or typos).
-          - If the store name appears at the top, include it in the source field of each item.
-          - Always return **only** valid JSON — no text before or after.
-          
-          Now parse this receipt text and return only the itemized JSON list:`
-            },
-            {
-              role: "user",
-              content: rawText
-            }
-          ],          
+          {
+            role: "system",
+            content: `You are a JSON receipt parser. Your only job is to extract a list of purchased products from raw receipt text.
+        
+        Return only a JSON array like this:
+        [
+          {
+            "description": "clear product name",
+            "amount": "0.00",
+            "source": "Store name if available"
+          }
+        ]
+        
+        ### RULES:
+        - Do NOT include totals, taxes, discounts, payment info, timestamps, or loyalty messages.
+        - Only include items with individual prices (usually near start or middle of receipt).
+        - Ensure descriptions are readable and clear (no codes, abbreviations, or typos).
+        - If the store name appears at the top, include it in the "source" field of each item.
+        - Always return **only** valid JSON — no text before or after.
+        
+        Now parse this receipt text and return only the itemized JSON list:`
+          },
+          {
+            role: "user",
+            content: rawText
+          }
+        ],          
         temperature: 0.3,
       }),
     });
