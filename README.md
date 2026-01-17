@@ -1,70 +1,112 @@
-# Getting Started with Create React App
+# XpenseAI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+XpenseAI is a full-stack expense tracking application with AI-powered receipt scanning and intelligent categorization. It combines a Spring Boot backend with a React frontend to provide secure budgeting, expense management, and rich visual insights.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- AI-powered receipt scanning using Tesseract.js OCR
+- Automatic extraction of line items, totals, and merchant information
+- Category prediction and description cleanup using OpenAI GPT-4 API
+- Secure user authentication and authorization with JWT
+- Budget creation, updates, and history tracking
+- Expense CRUD operations with category and budget linkage
+- Interactive dashboard with Recharts visualizations for:
+  - Monthly/period budget vs. actual
+  - Category breakdowns
+  - Trends over time
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React, JavaScript, Create React App, Recharts
+- **Backend**: Spring Boot, Spring Security, Spring Data JPA (Hibernate)
+- **Database**: (Configurable via Spring, e.g. PostgreSQL/MySQL/H2)
+- **Auth**: JWT-based authentication
+- **AI / OCR**: Tesseract.js for OCR, OpenAI GPT-4 API for categorization
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Architecture
 
-### `npm test`
+- `frontend/`: React SPA that handles authentication, dashboard, expense & budget screens, and receipt scanning UI.
+- `backend/`: Spring Boot REST API providing authentication, budget, and expense endpoints.
+  - `auth/`: login, registration, JWT token issuing
+  - `budget/`: budget entities, history tracking, controllers & services
+  - `expense/`: expense entities, controllers & services
+  - `config/`: Spring Security, JWT filter, and application configuration
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The frontend communicates with the backend via JSON REST endpoints and stores the JWT token client-side for authenticated requests.
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js (LTS)
+- Java 17+
+- Maven
+- An OpenAI API key (for GPT-4 categorization)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend Setup (Spring Boot)
 
-### `npm run eject`
+1. Navigate to the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Configure database and OpenAI API settings in `src/main/resources/application.yml`.
+   - Set your datasource (or use the existing one)
+   - Add your OpenAI API key if used server-side
+3. Run the backend:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+4. The API will typically be available at `http://localhost:8080`.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Frontend Setup (React)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Open a new terminal and navigate to the frontend folder:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure environment variables (e.g. `REACT_APP_API_BASE_URL`, OpenAI key if used client-side) in a `.env` file.
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+5. Open `http://localhost:3000` in your browser.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Key Modules
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Authentication**
+  - JWT-based login and registration (`auth/` in backend)
+  - React auth forms and token storage (`src/components/auth` and `src/services/authService.js`)
+- **Budget Management**
+  - Budget entities, repositories, services, and controllers in the backend
+  - React components for budget creation, listing, and history (`src/components/budget`)
+- **Expense Tracking**
+  - Expense entities and REST endpoints in the backend
+  - React forms and lists for managing expenses (`src/components/expense`)
+- **Receipt Scanning & AI Categorization**
+  - Tesseract.js integration for OCR (`src/components/scanner/ScanReceipt.js`)
+  - OpenAI GPT-4 API calls for categorizing and cleaning extracted text (`src/services/aiService.js`)
 
-## Learn More
+## Running Tests
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Frontend**: from `frontend/`:
+  ```bash
+  npm test
+  ```
+- **Backend**: from `backend/`:
+  ```bash
+  ./mvnw test
+  ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Future Improvements
 
-### Code Splitting
+- More granular spending insights and anomaly detection
+- Shared budgets and multi-user households
+- Export to CSV/Excel and integration with bank APIs
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## License
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is for personal/educational use and is not licensed for commercial distribution.
